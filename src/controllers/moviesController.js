@@ -51,23 +51,43 @@ const moviesController = {
     },
     create: function (req, res) {
         // TODO
-        const {title,release_date,awards,length,rating,genre} = req.body
+        const {title,release_date,awards,length,rating,genre_id} = req.body
         db.Movie.create({
             title: title.trim(),
             rating,
             length,
             awards,
-            genre_id : genre
+            release_date,
+            genre_id
         }),then(movie => {
             console.log(movie);
             return res,redirect("/movies")
         })
     },
-    edit: function(req, res) {
-        // TODO
-    },
+    edit: function (req, res) {
+        let Movie = Movies.findByPk(req.params.id);
+        return res.render("moviesEdit",{
+            Movie
+        })
+      },
     update: function (req,res) {
-        // TODO
+        const {title,rating,awards,length,genre_id,release_date}= req.body
+        Movies.update(
+            {
+                title : title.trim(),
+                rating,
+                awards,
+                length,
+                genre_id,
+                release_date  
+            },
+            {
+                where : {
+                    id : req.params.id
+                }
+            }
+        ).then( () => res.redirect("/movies/detail/" + req.params.id))
+        .catch(error => console.log(error))
     },
     delete: function (req, res) {
         // TODO
