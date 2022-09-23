@@ -90,12 +90,18 @@ const moviesController = {
         .catch(error => console.log(error))
     },
     delete: function (req, res) {
-        // TODO
+       Movies.findByPk(req.params.id)
+       .then(movie =>{
+        return res.render("moviesDelete",{movie})
+       })
+            
     },
-    destroy: function (req, res) {
-        // TODO
-    }
-
-}
+    destroy: function (req, res) {  
+       Movies.destroy({
+            where : {id: req.params.id}
+       })
+        .then(()=> res.redirect("/movies"))
+    },
+};
 
 module.exports = moviesController;
